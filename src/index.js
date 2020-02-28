@@ -32,7 +32,15 @@ class GommitCommand extends Command {
 
     const finalMessage = `[${askForFunctionality.toUpperCase()}] ${commitType.toLowerCase()} : ${commitMessage}${commitTicketNumber}`;
 
-    execSync(`git commit -m "${finalMessage}" ${argv.join(' ')}`);
+    try {
+      execSync(`git commit -m "${finalMessage}" ${argv.join(' ')}`, {
+        stdio: 'inherit',
+      });
+    } catch (e) {
+      this.log(
+        chalk.bold.italic.red('\nUnable to commit, please check the output!')
+      );
+    }
   }
 
   /**

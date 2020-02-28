@@ -1,7 +1,7 @@
 {
   "name": "gommit",
   "description": "Git commit on steroids",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Boris CERATI @bcerati",
   "bin": {
     "gommit": "./bin/run"
