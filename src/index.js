@@ -7,13 +7,6 @@ const chalk = require('chalk');
  * Gommit, ask different informations so the commit message can be formatted
  */
 class GommitCommand extends Command {
-  static flags = {
-    version: flags.version({ char: 'v' }),
-    help: flags.help({ char: 'h' }),
-  };
-
-  static strict = false;
-
   async run() {
     const { argv } = this.parse(GommitCommand);
 
@@ -21,16 +14,33 @@ class GommitCommand extends Command {
       chalk.green('Please enter the commit informations for your changes.\n')
     );
 
-    const commitType = await this.askForCommitType();
-    const askForFunctionality = await this.askForFunctionality();
-    const commitMessage = await this.askForCommitMessage();
+    const commitType = await this.getRequiredInformation(this.askForCommitType);
+
+    let commitFunctionality = await this.getRequiredInformation(
+      this.askForFunctionality
+    );
+
+    // parse the given type
+    commitFunctionality = commitFunctionality
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .split(' ')
+      .map(w => w.toUpperCase())
+      .join(' ');
+
+    let commitMessage = 'Work in Progress';
+    if (commitType !== 'WIP') {
+      commitMessage = await this.getRequiredInformation(
+        this.askForCommitMessage
+      );
+    }
+
     let commitTicketNumber = await this.askForTicketNumber();
 
     if (commitTicketNumber) {
       commitTicketNumber = ` #${commitTicketNumber.replace('#', '')}`;
     }
 
-    const finalMessage = `[${askForFunctionality.toUpperCase()}] ${commitType.toLowerCase()} : ${commitMessage}${commitTicketNumber}`;
+    const finalMessage = `${commitType.toLowerCase()}[${commitFunctionality.toUpperCase()}] : ${commitMessage}${commitTicketNumber}`;
 
     try {
       execSync(`git commit -m "${finalMessage}" ${argv.join(' ')}`, {
@@ -41,6 +51,14 @@ class GommitCommand extends Command {
         chalk.bold.italic.red('\nUnable to commit, please check the output!')
       );
     }
+  }
+
+  async getRequiredInformation(fct) {
+    do {
+      var value = await fct();
+    } while (!value);
+
+    return value;
   }
 
   /**
@@ -55,7 +73,7 @@ class GommitCommand extends Command {
           type: 'list',
           name: 'commitType',
           message: 'What is the type of commit?',
-          choices: ['Hotfix', 'Fix', 'Feature'],
+          choices: ['Fix', 'Feature', 'Hotfix', 'WIP', 'Other'],
         },
       ])
       .then(({ commitType }) => commitType);
@@ -106,13 +124,19 @@ class GommitCommand extends Command {
         {
           type: 'string',
           name: 'commitTicketNumber',
-          message: 'What is the number of your APM ticket?',
+          message: 'What is the number of your APM ticket? (empty)',
         },
       ])
       .then(({ commitTicketNumber }) => commitTicketNumber);
   }
 }
 
-GommitCommand.description = `Write a Git commit using the convention`;
+GommitCommand.description = `Write a Git commit using the convention. You can pass any of the git commit original options.`;
+GommitCommand.strict = false;
+
+GommitCommand.flags = {
+  version: flags.version({ char: 'v' }),
+  help: flags.help({ char: 'h' }),
+};
 
 module.exports = GommitCommand;
