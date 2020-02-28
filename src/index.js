@@ -27,7 +27,7 @@ class GommitCommand extends Command {
     let commitTicketNumber = await this.askForTicketNumber();
 
     if (commitTicketNumber) {
-      commitTicketNumber = ` (#${commitTicketNumber})`;
+      commitTicketNumber = ` #${commitTicketNumber.replace('#', '')}`;
     }
 
     const finalMessage = `[${askForFunctionality.toUpperCase()}] ${commitType.toLowerCase()} : ${commitMessage}${commitTicketNumber}`;
@@ -47,7 +47,7 @@ class GommitCommand extends Command {
           type: 'list',
           name: 'commitType',
           message: 'What is the type of commit?',
-          choices: ['Hotfix', 'Feature'],
+          choices: ['Hotfix', 'Fix', 'Feature'],
         },
       ])
       .then(({ commitType }) => commitType);
