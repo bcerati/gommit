@@ -1,5 +1,4 @@
-gommit
-======
+# gommit
 
 Git commit on steroids
 
@@ -9,11 +8,17 @@ Git commit on steroids
 [![License](https://img.shields.io/npm/l/gommit.svg)](https://github.com/bcerati/gommit/blob/master/package.json)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
+
+- [Usage](#usage)
+- [Commands](#commands)
+  <!-- tocstop -->
+
 # Usage
+
+Tests
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g gommit
 $ gommit COMMAND
@@ -25,8 +30,11 @@ USAGE
   $ gommit COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
 
 <!-- commandsstop -->
