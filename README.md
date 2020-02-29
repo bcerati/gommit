@@ -2,39 +2,36 @@
 
 Git commit on steroids
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/gommit.svg)](https://npmjs.org/package/gommit)
 [![Downloads/week](https://img.shields.io/npm/dw/gommit.svg)](https://npmjs.org/package/gommit)
 [![License](https://img.shields.io/npm/l/gommit.svg)](https://github.com/bcerati/gommit/blob/master/package.json)
 
-<!-- toc -->
-
+- [gommit](#gommit)
+- [Installation](#installation)
 - [Usage](#usage)
-- [Commands](#commands)
-  <!-- tocstop -->
+
+# Installation
+
+```sh-session
+npm install -g gommit
+```
 
 # Usage
 
-Tests
-
-<!-- usage -->
+If you need help about gommit, you can issue the following command
 
 ```sh-session
-$ npm install -g gommit
-$ gommit COMMAND
-running command...
-$ gommit (-v|--version|version)
-gommit/0.0.3 linux-x64 node-v9.11.2
-$ gommit --help [COMMAND]
-USAGE
-  $ gommit COMMAND
-...
+gommit --help
 ```
 
-<!-- usagestop -->
+You can create a new commit message by issuing the following command
 
-# Commands
+```sh-session
+gommit
+```
 
-<!-- commands -->
+```sh-session
+gommit -a
+```
 
-<!-- commandsstop -->
+=> this is the same as `git commit -a`. You can pass the same arguments that the `git commit commands`
