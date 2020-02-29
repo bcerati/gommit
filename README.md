@@ -19,7 +19,7 @@ $ npm install -g gommit
 $ gommit COMMAND
 running command...
 $ gommit (-v|--version|version)
-gommit/0.0.2 linux-x64 node-v9.11.2
+gommit/0.0.3 linux-x64 node-v9.11.2
 $ gommit --help [COMMAND]
 USAGE
   $ gommit COMMAND

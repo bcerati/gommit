@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { execSync } = require('child_process');
 const { Command, flags } = require('@oclif/command');
 const inquirer = require('inquirer');
@@ -8,7 +9,13 @@ const chalk = require('chalk');
  */
 class GommitCommand extends Command {
   async run() {
-    const { argv } = this.parse(GommitCommand);
+    const { argv, flags } = this.parse(GommitCommand);
+
+    if (flags.template) {
+      this.setMessageTemplate(flags.template);
+      this.log(chalk.green('The new template has been saved.'));
+      process.exit(0);
+    }
 
     this.log(
       chalk.green('Please enter the commit informations for your changes.\n')
@@ -40,10 +47,17 @@ class GommitCommand extends Command {
       commitTicketNumber = ` #${commitTicketNumber.replace('#', '')}`;
     }
 
-    const finalMessage = `${commitType.toLowerCase()}[${commitFunctionality.toUpperCase()}] : ${commitMessage}${commitTicketNumber}`;
+    let template = this.getMessageTemplate();
+    template = template.replace('[TYPE]', commitType.toLowerCase());
+    template = template.replace(
+      '[FUNCTIONNALITY]',
+      commitFunctionality.toUpperCase()
+    );
+    template = template.replace('[MESSAGE]', commitMessage);
+    template = template.replace('[TICKET_NUMBER]', commitTicketNumber);
 
     try {
-      execSync(`git commit -m "${finalMessage}" ${argv.join(' ')}`, {
+      execSync(`git commit -m "${template.trim()}" ${argv.join(' ')}`, {
         stdio: 'inherit',
       });
     } catch (e) {
@@ -53,6 +67,49 @@ class GommitCommand extends Command {
     }
   }
 
+  /**
+   * Get the template of the message if it was set.
+   * Otherwise, return the default template
+   *
+   * @returns {string}
+   */
+  getMessageTemplate() {
+    const homedir = require('os').homedir();
+    const templatePath = `${homedir}/.gommit/template`;
+
+    let exists = true;
+    try {
+      fs.accessSync(templatePath);
+    } catch (e) {
+      exists = false;
+      this.setMessageTemplate(
+        '[TYPE][[FUNCTIONNALITY]]: [MESSAGE][TICKET_NUMBER]'
+      );
+    }
+
+    return `${fs.readFileSync(templatePath)}`;
+  }
+
+  /**
+   * Set the template of the commit message
+   *
+   * @returns {string}
+   */
+  setMessageTemplate(template) {
+    const homedir = require('os').homedir();
+    const templatePath = `${homedir}/.gommit/template`;
+
+    execSync(`mkdir -p ${homedir}/.gommit`);
+    fs.writeFileSync(templatePath, template);
+
+    return template;
+  }
+
+  /**
+   * Get an information that ios required by gommit.
+   *
+   * @param {Function} fct
+   */
   async getRequiredInformation(fct) {
     do {
       var value = await fct();
@@ -136,6 +193,7 @@ GommitCommand.strict = false;
 
 GommitCommand.flags = {
   version: flags.version({ char: 'v' }),
+  template: flags.string(),
   help: flags.help({ char: 'h' }),
 };
 
