@@ -48,13 +48,13 @@ class GommitCommand extends Command {
     }
 
     let template = this.getMessageTemplate();
-    template = template.replace('[TYPE]', commitType.toLowerCase());
+    template = template.replace('[__TYPE__]', commitType.toLowerCase());
     template = template.replace(
-      '[FUNCTIONNALITY]',
+      '[__FUNCTIONNALITY__]',
       commitFunctionality.toUpperCase()
     );
-    template = template.replace('[MESSAGE]', commitMessage);
-    template = template.replace('[TICKET_NUMBER]', commitTicketNumber);
+    template = template.replace('[__MESSAGE__]', commitMessage);
+    template = template.replace('[__TICKET_NUMBER__]', commitTicketNumber);
 
     try {
       execSync(`git commit -m "${template.trim()}" ${argv.join(' ')}`, {
@@ -83,7 +83,7 @@ class GommitCommand extends Command {
     } catch (e) {
       exists = false;
       this.setMessageTemplate(
-        '[TYPE][[FUNCTIONNALITY]]: [MESSAGE][TICKET_NUMBER]'
+        '[__TYPE__][[__FUNCTIONNALITY__]] [__MESSAGE__][__TICKET_NUMBER__]'
       );
     }
 
