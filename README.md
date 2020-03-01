@@ -10,7 +10,7 @@ Git commit on steroids
 - [Installation](#installation)
 - [Usage](#usage)
 
-![Usage](./example.gif 'Usage example')
+![Usage](https://github.com/bcerati/gommit/blob/media/example.gif?raw=true 'Usage example')
 
 # Installation
 
