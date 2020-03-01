@@ -181,7 +181,7 @@ class GommitCommand extends Command {
         {
           type: 'string',
           name: 'commitTicketNumber',
-          message: 'What is the number of your APM ticket? (empty)',
+          message: 'What is the number of your ticket? (empty)',
         },
       ])
       .then(({ commitTicketNumber }) => commitTicketNumber);
