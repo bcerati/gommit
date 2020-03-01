@@ -10,6 +10,8 @@ Git commit on steroids
 - [Installation](#installation)
 - [Usage](#usage)
 
+![Usage](./example.gif 'Usage example')
+
 # Installation
 
 ```sh-session
